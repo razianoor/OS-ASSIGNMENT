@@ -1,9 +1,6 @@
 global clock_cycles
 import operator
 
-
-
-
 #''''''''''''''''''''''''''''''''''''''
 #           PROCESS CLASS  
 class process:
