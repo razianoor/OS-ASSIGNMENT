@@ -118,8 +118,8 @@ while(len(ready_queue) or len(p_queue)):
             p_queue.append(p)
             same_arr_time_p(ready_queue,p_queue,p.arrival_time) #inqueueing same arrival time processes
             t=len(p_queue)-1
-            if(len(ready_queue)):
-                while(ready_queue[t].arrival_time<=clock_cycles and len(ready_queue)):
+            if(ready_queue):
+                while(ready_queue[t].arrival_time<=clock_cycles and t>-1):
                     p=ready_queue.pop()
                     p_queue.append(p)
                     same_arr_time_p(ready_queue,p_queue,p.arrival_time) #inqueueing same arrival time processes
