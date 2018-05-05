@@ -72,7 +72,7 @@ def same_arr_time_p(ready_queue,p_queue,t):
         p_queue.append(p)
         v-=1
 #------------------------------------------------------------------------------------------------------------------------------
-def main_processing(waiting_queue,p_queue): 
+def main_processing(waiting_queue,p_queue,exected_processes): 
             qflag=False
             flag=False
             global clock_cycles
@@ -167,12 +167,12 @@ while(len(ready_queue) or len(p_queue)):
     #--------------------------------------------------------------------------------------------------------    
     if(ready_queue):
         if(p_queue):
-            main_processing(waiting_queue,p_queue)
+            main_processing(waiting_queue,p_queue,executed_processes)
     else:
         while(p_queue or waiting_queue):
             if(not p_queue):
                 p_queue=waiting_queue
-            main_processing(waiting_queue,p_queue)
+            main_processing(waiting_queue,p_queue,executed_processes)
     ##---------------------------------------------------------------------------------------
 display(executed_processes)
 sum=0
