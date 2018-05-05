@@ -5,7 +5,7 @@ import operator
 class process:
     
     #         INIT METHOD             #
-    def ___init___(self,arrival_time=0,burst_time=0,tburst=0,finish_time=0,start_time=-1,wait_time=0,turnaround_t=0,io_t=0,io_w=0):
+    def ___init___(self,arrival_time=0,burst_time=0,tburst=0,finish_time=0,start_time=-1,wait_time=0,turnaround_t=0,io_t=0,io_w=0,q_t=0):
 
         self.arrival_time=arrival_time
         self.burst_time=burst_time
@@ -16,6 +16,7 @@ class process:
         self.turnaround_time=turnaround_t
         self.io_time=io_t
         self.io_wait=io_w
+        self.q_t=0
 #''''''''''''''''''''''''''''''''''''''''
 #'''''''''''''''''''''''''''''''''''''''
 #       display 
@@ -59,6 +60,7 @@ def input_queue(ready_queue):
             p.turnaround_time=0
             p.io_time=c
             p.io_wait=d
+            p.q_t=0
             ready_queue.append(p)
 
         import os
@@ -84,12 +86,14 @@ sort(ready_queue,True)            #SORTING QUEUE BY ARRIVAL TIME
 clock_cycles=0   
 p_queue=[]
 executed_processes=[]
+waiting_queue=[]
             #cpu ticks
 RUNING_PROCESS=False
 flag=True
 wflag=True
 check=True
 sflag=True
+qflag=True
 while(len(ready_queue) or len(p_queue)):
     
     if(ready_queue):
@@ -123,28 +127,34 @@ while(len(ready_queue) or len(p_queue)):
     if(ready_queue):
         #----------------------------------------------------------------------------------------------
         if(p_queue):
-           
             runing_process=p_queue.pop()
-            if(runing_process.tburst<=quantum_time and runing_process.tburst>0):
-                if(sflag):
-                    runing_process.start_time=clock_cycles
-                    sflag=False
-                clock_cycles+=runing_process.tburst
-                runing_process.finish_time=clock_cycles
-                runing_process.tburst=0
-                flag=True
-            elif(runing_process.tburst>quantum_time):
-                if(sflag):
-                    runing_process.start_time=clock_cycles
-                    sflag=False
-                runing_process.tburst-=quantum_time
-                clock_cycles+=quantum_time
-                p_queue.insert(0,runing_process)
-            if(runing_process.tburst==0 and flag==True):
-                runing_process.wait_time=clock_cycles - runing_process.arrival_time - runing_process.burst_time
-                runing_process.turnaround_time=clock_cycles - runing_process.arrival_time
-                executed_processes.append(runing_process)
-                sflag=True           
+            if(not runing_process.q_t):
+                runing_process.q_t=quantum_time
+
+                if(runing_process.tburst<=quantum_time and runing_process.tburst>0):
+                    if(sflag):
+                        runing_process.start_time=clock_cycles
+                        sflag=False
+                    while(runing_process.q_t and runing_process.tburst):
+                        clock_cycles+=1
+                        runing_process.tburst-=1
+                        runing_process.q_t-=1
+                    runing_process.finish_time=clock_cycles
+                    flag=True
+                elif(runing_process.tburst>quantum_time):
+                    if(sflag):
+                        runing_process.start_time=clock_cycles
+                        sflag=False
+                    while(runing_process.q_t and runing_process.tburst):
+                        clock_cycles+=1
+                        runing_process.tburst-=1
+                        runing_process.q_t-=1
+                    p_queue.insert(0,runing_process)
+                if(runing_process.tburst==0 and flag==True):
+                    runing_process.wait_time=clock_cycles - runing_process.arrival_time - runing_process.burst_time
+                    runing_process.turnaround_time=clock_cycles - runing_process.arrival_time
+                    executed_processes.append(runing_process)
+                    sflag=True           
                 
 
     else:
@@ -152,27 +162,34 @@ while(len(ready_queue) or len(p_queue)):
         while(p_queue):
 
             runing_process=p_queue.pop()
-            if(runing_process.tburst<=quantum_time and runing_process.tburst>0):
-                if(sflag):
-                    runing_process.start_time=clock_cycles
-                    sflag=False
-                clock_cycles+=runing_process.tburst
-                runing_process.finish_time=clock_cycles
-                runing_process.tburst=0
-                flag=True
-            elif(runing_process.tburst>quantum_time):
-                if(sflag):
-                    runing_process.start_time=clock_cycles
-                    sflag=False
-                runing_process.tburst-=quantum_time
-                clock_cycles+=quantum_time
-                p_queue.insert(0,runing_process)
-            if(runing_process.tburst==0 and flag==True):
-                runing_process.wait_time=clock_cycles - runing_process.arrival_time - runing_process.burst_time
-                runing_process.turnaround_time=clock_cycles - runing_process.arrival_time
-                executed_processes.append(runing_process)
-                sflag=True           
-       #---------------------------------------------------------------------------------------
+            if(not runing_process.q_t):
+                runing_process.q_t=quantum_time
+
+                if(runing_process.tburst<=quantum_time and runing_process.tburst>0):
+                    if(sflag):
+                        runing_process.start_time=clock_cycles
+                        sflag=False
+                    while(runing_process.q_t and runing_process.tburst):
+                        clock_cycles+=1
+                        runing_process.tburst-=1
+                        runing_process.q_t-=1
+                    runing_process.finish_time=clock_cycles
+                    flag=True
+                elif(runing_process.tburst>quantum_time):
+                    if(sflag):
+                        runing_process.start_time=clock_cycles
+                        sflag=False
+                    while(runing_process.q_t and runing_process.tburst):
+                        clock_cycles+=1
+                        runing_process.tburst-=1
+                        runing_process.q_t-=1
+                    p_queue.insert(0,runing_process)
+                if(runing_process.tburst==0 and flag==True):
+                    runing_process.wait_time=clock_cycles - runing_process.arrival_time - runing_process.burst_time
+                    runing_process.turnaround_time=clock_cycles - runing_process.arrival_time
+                    executed_processes.append(runing_process)
+                    sflag=True           
+        #---------------------------------------------------------------------------------------
 display(executed_processes)
 sum=0
 sumt=0
@@ -183,5 +200,4 @@ ave=sum/len(executed_processes)
 avet=sumt/len(executed_processes)
 print ('\n\n\nAVERAGE WAITING TIME : '+str(ave)) 
 print ('\nAVERAGE TURNAROUND TIME : '+str(avet))
-
 #---------------------------------------------------------------------------------------------------------------------- 
