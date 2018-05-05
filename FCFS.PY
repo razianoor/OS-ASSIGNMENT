@@ -117,7 +117,18 @@ for i in range(0,len(ready_queue) ):
     ready_queue[i].turnaround_time=ready_queue[i].finish_time-ready_queue[i].arrival_time  #turnaround time
 
 display(ready_queue)   
-#'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+sum=0
+sumt=0
+for i in ready_queue:
+    sum+=i.wait_time
+    sumt+=i.turnaround_time
+ave=sum/len(ready_queue)
+avet=sumt/len(ready_queue)
+print ('\n\n\nAVERAGE WAITING TIME : '+str(ave)) 
+print ('\nAVERAGE TURNAROUND TIME : '+str(avet)) 
+#''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
  ############################################################################################################################
-#############                                         SJF
+                                       
