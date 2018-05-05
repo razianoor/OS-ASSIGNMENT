@@ -127,7 +127,6 @@ while(len(ready_queue) or len(p_queue)):
                     same_arr_time_p(ready_queue,p_queue,p.arrival_time) #inqueueing same arrival time processes
                     t-=1           
     #--------------------------------------------------------------------------------------------------------    
-    #(min(ready_queue,key=lambda x: x.burst_time)
 
     bsort(p_queue,True)            #SORTING QUEUE BY BURST TIME #sort array in desc order on busrt time
     if(ready_queue):
