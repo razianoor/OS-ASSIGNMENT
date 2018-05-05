@@ -42,6 +42,7 @@ def sort(ready_queue,f):
       ready_queue.sort(key=lambda x:x.arrival_time,reverse=f)
 
 #''''''''''''''''''''''''''''''''''''''''
+#          SORTING---->BURST TIME
 def bsort(ready_queue,f):
       
       ready_queue.sort(key=lambda x:x.burst_time,reverse=f)
