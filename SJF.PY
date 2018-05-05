@@ -110,8 +110,10 @@ while(len(ready_queue) or len(p_queue)):
             same_arr_time_p(ready_queue,p_queue,p.arrival_time)#inqueueing same arrival time processes
            
         #process doesn't arrive yet to queue in p_queue
-        elif(p.arrival_time>clock_cycles):
-            ready_queue.append(p)
+        elif(p.arrival_time>clock_cycles and len(p_queue)==0):
+              while(p.arrival_time!=clock_cycles):
+                  clock_cycles+=1
+              ready_queue.append(p)
         #p_queue enqueue
         else:
 
@@ -128,13 +130,13 @@ while(len(ready_queue) or len(p_queue)):
     #(min(ready_queue,key=lambda x: x.burst_time)
 
     bsort(p_queue,True)            #SORTING QUEUE BY BURST TIME #sort array in desc order on busrt time
-    if(len(ready_queue)):
+    if(ready_queue):
         #----------------------------------------------------------------------------------------------
-
-        runing_process=p_queue.pop()
+        if(p_queue):
+            runing_process=p_queue.pop()
 
         
-        while(runing_process.tburst > 0):
+            while(runing_process.tburst > 0):
 
             #if(ready_queue[i].arrival_time>clock_cycles):
             #    clock_cycles+=1
@@ -146,15 +148,13 @@ while(len(ready_queue) or len(p_queue)):
 
                 if(runing_process.tburst==0):
                     runing_process.finish_time=clock_cycles            
-        if wflag:
-            runing_process.wait_time=0
-            wflag=False
-        else:
-            runing_process.wait_time=runing_process.start_time - runing_process.arrival_time #wait time
-            runing_process.turnaround_time=runing_process.finish_time-runing_process.arrival_time  #turnaround time
-       
-        executed_processes.append(runing_process)
-
+            if wflag:
+                runing_process.wait_time=0
+                wflag=False
+            else:
+                runing_process.wait_time=runing_process.start_time - runing_process.arrival_time #wait time
+                executed_processes.append(runing_process)
+                runing_process.turnaround_time=runing_process.finish_time-runing_process.arrival_time  #turnaround time
         #-----------------------------------------------------------------------------------------------
     else:
         #-----------------------------------------------------------------------------------------------
