@@ -174,4 +174,14 @@ while(len(ready_queue) or len(p_queue)):
                 sflag=True           
        #---------------------------------------------------------------------------------------
 display(executed_processes)
+sum=0
+sumt=0
+for i in executed_processes:
+    sum+=i.wait_time
+    sumt+=i.turnaround_time
+ave=sum/len(executed_processes)
+avet=sumt/len(executed_processes)
+print ('\n\n\nAVERAGE WAITING TIME : '+str(ave)) 
+print ('\nAVERAGE TURNAROUND TIME : '+str(avet))
+
 #---------------------------------------------------------------------------------------------------------------------- 
