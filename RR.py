@@ -89,7 +89,7 @@ RUNING_PROCESS=False
 flag=True
 wflag=True
 check=True
-
+sflag=True
 while(len(ready_queue) or len(p_queue)):
     
     if(ready_queue):
@@ -126,11 +126,17 @@ while(len(ready_queue) or len(p_queue)):
            
             runing_process=p_queue.pop()
             if(runing_process.tburst<=quantum_time and runing_process.tburst>0):
+                if(sflag):
+                    runing_process.start_time=clock_cycles
+                    sflag=False
                 clock_cycles+=runing_process.tburst
                 runing_process.finish_time=clock_cycles
                 runing_process.tburst=0
                 flag=True
-            elif(runing_process.burst_time>quantum_time):
+            elif(runing_process.tburst>quantum_time):
+                if(sflag):
+                    runing_process.start_time=clock_cycles
+                    sflag=False
                 runing_process.tburst-=quantum_time
                 clock_cycles+=quantum_time
                 p_queue.insert(0,runing_process)
@@ -138,6 +144,7 @@ while(len(ready_queue) or len(p_queue)):
                 runing_process.wait_time=clock_cycles - runing_process.arrival_time - runing_process.burst_time
                 runing_process.turnaround_time=clock_cycles - runing_process.arrival_time
                 executed_processes.append(runing_process)
+                sflag=True           
                 
 
     else:
@@ -146,11 +153,17 @@ while(len(ready_queue) or len(p_queue)):
 
             runing_process=p_queue.pop()
             if(runing_process.tburst<=quantum_time and runing_process.tburst>0):
+                if(sflag):
+                    runing_process.start_time=clock_cycles
+                    sflag=False
                 clock_cycles+=runing_process.tburst
                 runing_process.finish_time=clock_cycles
                 runing_process.tburst=0
                 flag=True
             elif(runing_process.tburst>quantum_time):
+                if(sflag):
+                    runing_process.start_time=clock_cycles
+                    sflag=False
                 runing_process.tburst-=quantum_time
                 clock_cycles+=quantum_time
                 p_queue.insert(0,runing_process)
@@ -158,7 +171,7 @@ while(len(ready_queue) or len(p_queue)):
                 runing_process.wait_time=clock_cycles - runing_process.arrival_time - runing_process.burst_time
                 runing_process.turnaround_time=clock_cycles - runing_process.arrival_time
                 executed_processes.append(runing_process)
-           
+                sflag=True           
        #---------------------------------------------------------------------------------------
 display(executed_processes)
 #---------------------------------------------------------------------------------------------------------------------- 
